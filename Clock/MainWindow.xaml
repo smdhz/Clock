@@ -1,0 +1,34 @@
+﻿<Window x:Class="Clock.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Clock"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="81" Width="200" AllowsTransparency="True" WindowStyle="None" Background="Transparent" Icon="/preview.ico"
+        Topmost="True" MouseMove="Window_MouseMove" MouseDoubleClick="Window_MouseDoubleClick" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Border HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="2" CornerRadius="3">
+        <StackPanel Margin="20,10">
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="24"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="0" Color="Gray" Opacity="1" BlurRadius="6"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock Name="txtDate" FontSize="16">Date</TextBlock>
+            <TextBlock Name="txtTime">Time</TextBlock>
+        </StackPanel>
+
+        <Border.Background>
+            <SolidColorBrush Opacity="0.4" Color="WhiteSmoke"/>
+        </Border.Background>
+        <Border.BorderBrush>
+            <SolidColorBrush Opacity="0.6" Color="Gray"/>
+        </Border.BorderBrush>
+    </Border>
+</Window>
