@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,25 +23,40 @@ namespace Clock
     public partial class MainWindow : Window
     {
         private bool exit;
+        private readonly CultureInfo culture = CultureInfo.GetCultureInfo("ja-JP");
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private async void timer()
+        private async void tick()
         {
-            var culture = System.Globalization.CultureInfo.GetCultureInfo("ja-JP");
-
             while (!exit)
             {
-                Dispatcher.Invoke(() => txtDate.Text = string.Format(culture, "{0:yyyy/MM/dd dddd}", DateTime.Today));
-                Dispatcher.Invoke(() => txtTime.Text = DateTime.Now.ToLongTimeString());
+                Dispatcher.Invoke(() =>
+                {
+                    txtDate.Text = string.Format(culture, "{0:yyyy/MM/dd dddd}", DateTime.Today);
+                    txtTime.Text = DateTime.Now.ToLongTimeString();
+                });
                 await Task.Delay(1000);
             }
 
             Dispatcher.Invoke(Application.Current.Shutdown);
         }
+
+        //private async void tock()
+        //{
+        //    while (!exit)
+        //    {
+        //        Dispatcher.Invoke(() =>
+        //        {
+        //            pgsCpu.Value = cpu.Sensors.Where(s => s.SensorType == SensorType.Load).Max(i => i.Value ?? 0);
+        //            pgsMem.Value = pgsMem.Maximum - memUsage.NextValue();
+        //        });
+        //        await Task.Delay(5000);
+        //    }
+        //}
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
@@ -57,9 +74,21 @@ namespace Clock
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Task.Run(timer);
-            Left = Properties.Settings.Default.Location.X;
-            Top = Properties.Settings.Default.Location.Y;
+            System.Drawing.Point position = Properties.Settings.Default.Location;
+            if (position.X < SystemParameters.VirtualScreenLeft ||
+                position.Y < SystemParameters.VirtualScreenTop ||
+                SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth < position.X ||
+                SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight < position.Y)
+            {
+                Left = Top = 100;
+            }
+            else
+            {
+                Left = position.X;
+                Top = position.Y;
+            }
+
+            Task.Run(tick);
         }
     }
 }

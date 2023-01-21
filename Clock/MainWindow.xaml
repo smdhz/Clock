@@ -9,6 +9,12 @@
         Height="81" Width="200" AllowsTransparency="True" WindowStyle="None" Background="Transparent" Icon="/preview.ico"
         Topmost="True" MouseMove="Window_MouseMove" MouseDoubleClick="Window_MouseDoubleClick" Loaded="Window_Loaded" Closing="Window_Closing">
     <Border HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="2" CornerRadius="3">
+        <Border.Background>
+            <SolidColorBrush Opacity="0.4" Color="WhiteSmoke"/>
+        </Border.Background>
+        <Border.BorderBrush>
+            <SolidColorBrush Opacity="0.6" Color="Gray"/>
+        </Border.BorderBrush>
         <StackPanel Margin="20,10">
             <StackPanel.Resources>
                 <Style TargetType="TextBlock">
@@ -23,12 +29,5 @@
             <TextBlock Name="txtDate" FontSize="16">Date</TextBlock>
             <TextBlock Name="txtTime">Time</TextBlock>
         </StackPanel>
-
-        <Border.Background>
-            <SolidColorBrush Opacity="0.4" Color="WhiteSmoke"/>
-        </Border.Background>
-        <Border.BorderBrush>
-            <SolidColorBrush Opacity="0.6" Color="Gray"/>
-        </Border.BorderBrush>
     </Border>
 </Window>
