@@ -8,20 +8,19 @@
         Title="MainWindow" 
         Height="81" Width="200" AllowsTransparency="True" WindowStyle="None" Background="Transparent" Icon="/preview.ico"
         Topmost="True" MouseMove="Window_MouseMove" MouseDoubleClick="Window_MouseDoubleClick" Loaded="Window_Loaded" Closing="Window_Closing">
-    <Border HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="2" CornerRadius="3">
-        <Border.Background>
-            <SolidColorBrush Opacity="0.4" Color="WhiteSmoke"/>
-        </Border.Background>
+    <Border HorizontalAlignment="Center" VerticalAlignment="Center" 
+            Background="{DynamicResource BackGround}" BorderThickness="2" CornerRadius="3">
         <Border.BorderBrush>
-            <SolidColorBrush Opacity="0.6" Color="Gray"/>
+            <SolidColorBrush Color="{DynamicResource Shadow}"/>
         </Border.BorderBrush>
         <StackPanel Margin="20,10">
             <StackPanel.Resources>
                 <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{DynamicResource Text}"/>
                     <Setter Property="FontSize" Value="24"/>
                     <Setter Property="Effect">
                         <Setter.Value>
-                            <DropShadowEffect ShadowDepth="0" Color="Gray" Opacity="1" BlurRadius="6"/>
+                            <DropShadowEffect ShadowDepth="0" Color="{DynamicResource Shadow}" Opacity="1" BlurRadius="6"/>
                         </Setter.Value>
                     </Setter>
                 </Style>

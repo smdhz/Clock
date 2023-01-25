@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Clock
 {
@@ -24,13 +25,14 @@ namespace Clock
     {
         private bool exit;
         private readonly CultureInfo culture = CultureInfo.GetCultureInfo("ja-JP");
+        private Theme theme = Theme.Light;
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private async void tick()
+        private async Task tick()
         {
             while (!exit)
             {
@@ -39,24 +41,24 @@ namespace Clock
                     txtDate.Text = string.Format(culture, "{0:yyyy/MM/dd dddd}", DateTime.Today);
                     txtTime.Text = DateTime.Now.ToLongTimeString();
                 });
+
                 await Task.Delay(1000);
             }
-
-            Dispatcher.Invoke(Application.Current.Shutdown);
         }
 
-        //private async void tock()
-        //{
-        //    while (!exit)
-        //    {
-        //        Dispatcher.Invoke(() =>
-        //        {
-        //            pgsCpu.Value = cpu.Sensors.Where(s => s.SensorType == SensorType.Load).Max(i => i.Value ?? 0);
-        //            pgsMem.Value = pgsMem.Maximum - memUsage.NextValue();
-        //        });
-        //        await Task.Delay(5000);
-        //    }
-        //}
+        private async Task tock()
+        {
+            while (!exit)
+            {
+                Theme current = Application.Current.InDarkMode() ? Theme.Dark : Theme.Light;
+                Dispatcher.Invoke(() =>
+                {
+                    if (theme != current)
+                        LoadTheme(current);
+                });
+                await Task.Delay(5000);
+            }
+        }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
@@ -88,7 +90,28 @@ namespace Clock
                 Top = position.Y;
             }
 
-            Task.Run(tick);
+            Task.Run(() =>
+            {
+                Task.WaitAny(tick(), tock());
+                Dispatcher.Invoke(Application.Current.Shutdown);
+            });
+        }
+
+        /// <summary>
+        /// 更新资源
+        /// </summary>
+        /// <param name="current"></param>
+        private void LoadTheme(Theme current) 
+        {
+            theme = current;
+            Resources.MergedDictionaries.Clear();
+            Resources.MergedDictionaries.Add(
+                new ResourceDictionary
+                {
+                    Source = new Uri($"/Themes/{theme}.xaml", UriKind.RelativeOrAbsolute)
+                });
         }
     }
+
+    internal enum Theme { Light, Dark }
 }
