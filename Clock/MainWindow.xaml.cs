@@ -32,6 +32,10 @@ namespace Clock
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 每秒更新
+        /// </summary>
+        /// <returns></returns>
         private async Task tick()
         {
             while (!exit)
@@ -46,6 +50,10 @@ namespace Clock
             }
         }
 
+        /// <summary>
+        /// 每5秒更新
+        /// </summary>
+        /// <returns></returns>
         private async Task tock()
         {
             while (!exit)
@@ -60,22 +68,43 @@ namespace Clock
             }
         }
 
+        /// <summary>
+        /// 拖动窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
                 DragMove();
         }
 
+        /// <summary>
+        /// 终止计时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e) => exit = true;
 
+        /// <summary>
+        /// 保存状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.Location = new System.Drawing.Point((int)Left, (int)Top);
             Properties.Settings.Default.Save();
         }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // 出现在屏幕外时强行重置
             System.Drawing.Point position = Properties.Settings.Default.Location;
             if (position.X < SystemParameters.VirtualScreenLeft ||
                 position.Y < SystemParameters.VirtualScreenTop ||
@@ -90,10 +119,11 @@ namespace Clock
                 Top = position.Y;
             }
 
+            // 启动计时
             Task.Run(() =>
             {
                 Task.WaitAny(tick(), tock());
-                Dispatcher.Invoke(Application.Current.Shutdown);
+                Dispatcher.Invoke(Close);
             });
         }
 

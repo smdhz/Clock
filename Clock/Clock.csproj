@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="preview.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="preview.ico" />
   </ItemGroup>
 
